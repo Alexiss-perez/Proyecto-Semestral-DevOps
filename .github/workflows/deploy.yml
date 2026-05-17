@@ -47,4 +47,4 @@ jobs:
           docker stop back-despachos || true
           docker rm back-despachos || true
           docker pull ${{ secrets.DOCKERHUB_USERNAME }}/back-despachos:latest
-          docker run -d --name back-despachos -p 8081:8081 --add-host=host.docker.internal:host-gateway -e DB_ENDPOINT=host.docker.internal -e DB_PORT=3306 -e DB_NAME=despachos_db -e DB_USERNAME=root -e DB_PASSWORD=root alexissperez/back-despachos:latest
+          docker run -d --name back-despachos -p 8081:8081 -e DB_ENDPOINT=EL_ENDPOINT_DE_TU_RDS_AWS -e DB_PORT=3306 -e DB_NAME=tu_bd -e DB_USERNAME=appuser -e DB_PASSWORD=123456 alexissperez/back-despachos:latest
