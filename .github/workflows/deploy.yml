@@ -2,15 +2,11 @@ name: Deploy Backend Despachos
 
 on:
   push:
-    branches: [ main ]
+    branches: [ deploy ]
 
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
-    
-    defaults:
-      run:
-        working-directory: ./back-Despachos_SpringBoot/Springboot-API-REST-DESPACHO
 
     steps:
     - name: Checkout del codigo
@@ -23,8 +19,11 @@ jobs:
         distribution: 'temurin'
         cache: maven
 
+    # Ejecutamos Maven apuntando directamente al directorio correcto
     - name: Compilar proyecto con Maven
-      run: mvn clean package -DskipTests
+      run: |
+        cd ./back-Despachos_SpringBoot/Springboot-API-REST-DESPACHO
+        mvn clean package -DskipTests
 
     - name: Iniciar sesion en Docker Hub
       uses: docker/login-action@v2
@@ -32,8 +31,10 @@ jobs:
         username: ${{ secrets.DOCKERHUB_USERNAME }}
         password: ${{ secrets.DOCKERHUB_TOKEN }}
 
+    # Construimos la imagen moviéndonos a la carpeta donde está el Dockerfile
     - name: Construir y subir imagen Docker
       run: |
+        cd ./back-Despachos_SpringBoot/Springboot-API-REST-DESPACHO
         docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/back-despachos:latest .
         docker push ${{ secrets.DOCKERHUB_USERNAME }}/back-despachos:latest
 
@@ -47,4 +48,4 @@ jobs:
           docker stop back-despachos || true
           docker rm back-despachos || true
           docker pull ${{ secrets.DOCKERHUB_USERNAME }}/back-despachos:latest
-          docker run -d --name back-despachos -p 8081:8081 -e DB_ENDPOINT=EL_ENDPOINT_DE_TU_RDS_AWS -e DB_PORT=3306 -e DB_NAME=tu_bd -e DB_USERNAME=appuser -e DB_PASSWORD=123456 alexissperez/back-despachos:latest
+          docker run -d --name back-despachos -p 8081:8081 ${{ secrets.DOCKERHUB_USERNAME }}/back-despachos:latest
