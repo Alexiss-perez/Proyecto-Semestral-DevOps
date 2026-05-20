@@ -2,13 +2,9 @@
 
 Proyecto desarrollado para la asignatura **Full Stack III**, implementando una API REST con Spring Boot, contenedorización mediante Docker, despliegue en AWS EC2 y documentación utilizando Swagger.
 
----
-
 ## Descripción
 
 El sistema permite gestionar información relacionada con despachos mediante una API REST desarrollada en Spring Boot. La solución fue desplegada utilizando contenedores Docker y posteriormente publicada en una instancia EC2 de AWS.
-
----
 
 ## Arquitectura del Proyecto
 
@@ -31,8 +27,6 @@ La solución considera:
 - Publicación de imágenes en Docker Hub.
 - Despliegue en AWS EC2.
 - Control de versiones mediante GitHub.
-
----
 
 ## Tecnologías Utilizadas
 
@@ -62,7 +56,6 @@ La solución considera:
 - Git
 - GitHub
 
----
 
 ## Estructura del Proyecto
 
@@ -80,8 +73,6 @@ Springboot-API-REST-DESPACHO
 ├── pom.xml
 └── README.md
 ```
-
----
 
 # Configuración Base de Datos
 
@@ -107,8 +98,6 @@ spring.datasource.password=123456
 spring.jpa.hibernate.ddl-auto=update
 spring.jpa.show-sql=true
 ```
-
----
 
 # Ejecución Local
 
@@ -142,8 +131,6 @@ La API quedará disponible en:
 http://localhost:8081
 ```
 
----
-
 # Docker
 
 ## Construcción de la imagen
@@ -163,8 +150,6 @@ docker images
 ```bash
 docker run -p 8081:8081 despacho:v1
 ```
-
----
 
 # Variables de Entorno
 
@@ -190,8 +175,6 @@ docker run -p 8081:8081 ^
 despacho:v1
 ```
 
----
-
 # Swagger
 
 La documentación de la API puede visualizarse en:
@@ -207,8 +190,6 @@ Desde Swagger es posible:
 - Revisar modelos de datos.
 - Validar respuestas del servicio.
 
----
-
 # Despliegue AWS EC2
 
 La aplicación fue desplegada en una instancia EC2 de AWS utilizando Docker.
@@ -222,7 +203,6 @@ La aplicación fue desplegada en una instancia EC2 de AWS utilizando Docker.
 5. Configuración de puertos.
 6. Validación mediante Swagger.
 
----
 
 # Control de Versiones
 
@@ -235,7 +215,6 @@ Se realizaron:
 - Seguimiento del avance del proyecto.
 - Colaboración entre integrantes del equipo.
 
----
 
 # Conexión Frontend - Backend
 
@@ -255,8 +234,6 @@ fetch(API_URL)
   .then(data => console.log(data));
 ```
 
----
-
 # Pruebas Realizadas
 
 - Construcción de imagen Docker.
@@ -267,12 +244,8 @@ fetch(API_URL)
 - Despliegue en AWS EC2.
 - Consumo desde Frontend.
 
----
-
-
 Integrantes:
 
 - Fernanda Collinao
 - Alexiss Pérez
 
----
