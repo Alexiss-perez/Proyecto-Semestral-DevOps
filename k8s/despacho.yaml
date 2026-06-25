@@ -1,0 +1,47 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: db-secret
+type: Opaque
+stringData:
+  DB_ENDPOINT: "localhost"
+  DB_PORT: "3306"
+  DB_NAME: "innovatech"
+  DB_USERNAME: "root"
+  DB_PASSWORD: "password"
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: innovatech-despacho
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: innovatech-despacho
+  template:
+    metadata:
+      labels:
+        app: innovatech-despacho
+    spec:
+      containers:
+        - name: despacho
+          image: innovatech-despacho:latest
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8081
+          envFrom:
+            - secretRef:
+                name: db-secret
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: innovatech-despacho-service
+spec:
+  type: ClusterIP
+  selector:
+    app: innovatech-despacho
+  ports:
+    - port: 8081
+      targetPort: 8081
