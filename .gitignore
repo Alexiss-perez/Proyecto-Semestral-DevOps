@@ -1,4 +1,16 @@
 # folders
 .mvn/
+
 # files
 .DS_Store
+
+# Terraform
+terraform/.terraform/
+terraform/.terraform.lock.hcl
+
+# Terraform state
+*.tfstate
+*.tfstate.*
+
+# Variables sensibles
+*.tfvars
