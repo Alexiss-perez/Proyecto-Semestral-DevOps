@@ -21,7 +21,7 @@ jobs:
       - name: Compilar backend despacho
         run: |
           cd back-bespachos-springboot/api-rest-despacho
-          ./mvnw clean package -DskipTests
+          mvn clean package -DskipTests
 
       - name: Compilar backend ventas
         run: |
