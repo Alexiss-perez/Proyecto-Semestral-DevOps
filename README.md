@@ -1,248 +1,275 @@
-# Sistema de Gestión de Despachos
+# Proyecto Semestral DevOps - Innovatech
 
-Proyecto desarrollado para la asignatura **Full Stack III**, implementando una API REST con Spring Boot, contenedorización mediante Docker, despliegue en AWS EC2 y documentación utilizando Swagger.
+## Introducción
 
-## Descripción
+Proyecto desarrollado para la asignatura **Introducción a Herramientas DevOps**.
 
-El sistema permite gestionar información relacionada con despachos mediante una API REST desarrollada en Spring Boot. La solución fue desplegada utilizando contenedores Docker y posteriormente publicada en una instancia EC2 de AWS.
+El objetivo fue implementar una arquitectura basada en contenedores utilizando Docker, automatizar la integración y el despliegue continuo mediante GitHub Actions, y orquestar los servicios con Kubernetes sobre Amazon EKS.
 
-## Arquitectura del Proyecto
+La solución contempla backend desarrollado con Spring Boot, frontend desarrollado con React y una infraestructura preparada para ejecutarse en la nube utilizando servicios de AWS.
+
+
+# Integrantes
+
+- Fernanda Collinao
+- Alexiss Pérez
+
+
+# Objetivos
+
+- Contenerizar los servicios mediante Docker.
+- Automatizar el proceso de integración continua (CI).
+- Automatizar el despliegue continuo (CD).
+- Publicar imágenes Docker en Amazon ECR.
+- Orquestar los contenedores utilizando Kubernetes.
+- Desplegar la solución sobre Amazon EKS.
+- Aplicar buenas prácticas DevOps.
+
+
+# Arquitectura
 
 ```text
-Frontend
-    │
-    ▼
-API REST Spring Boot
-    │
-    ▼
-MySQL Database
+                    GitHub
+
+                       │
+                 GitHub Actions
+                       │
+         ┌─────────────┴─────────────┐
+         │                           │
+         ▼                           ▼
+ Compilación                  Docker Build
+         │                           │
+         └─────────────┬─────────────┘
+                       │
+                 Amazon ECR
+                       │
+                       ▼
+                 Amazon EKS
+                       │
+      ┌────────────────┼────────────────┐
+      ▼                ▼                ▼
+
+ Frontend React   API Despachos   API Ventas
+
+                       │
+                       ▼
+
+                    MySQL
 ```
 
-La solución considera:
 
-- Backend desarrollado en Spring Boot.
-- Persistencia de datos mediante MySQL.
-- Documentación automática con Swagger.
-- Contenedorización con Docker.
-- Publicación de imágenes en Docker Hub.
-- Despliegue en AWS EC2.
-- Control de versiones mediante GitHub.
+# Tecnologías Utilizadas
 
-## Tecnologías Utilizadas
-
-### Backend
+## Backend
 
 - Java 17
 - Spring Boot 3
 - Spring Data JPA
 - Maven
 
-### Base de Datos
+## Frontend
 
-- MySQL 8
+- React
+- Vite
 
-### DevOps
+## Base de Datos
+
+- MySQL
+
+## Contenedores
 
 - Docker
-- Docker Hub
-- AWS EC2
+- Docker Compose
 
-### Documentación
+## Kubernetes
 
-- Swagger OpenAPI
+- Kubernetes
+- kubectl
+- eksctl
 
-### Control de Versiones
+## AWS
+
+- Amazon EKS
+- Amazon ECR
+- AWS CLI
+- IAM
+
+## Automatización
+
+- GitHub Actions
+
+## Control de versiones
 
 - Git
 - GitHub
 
 
-## Estructura del Proyecto
+# Estructura del Proyecto
 
 ```text
-Springboot-API-REST-DESPACHO
-│
-├── src
-│   ├── main
-│   │   ├── java
-│   │   └── resources
-│   │
-│   └── test
-│
-├── Dockerfile
-├── pom.xml
-└── README.md
+Proyecto-Semestral-DevOps/
+
+.github/
+└── workflows/
+    └── deploy.yml
+
+back-despachos-springboot/
+
+back-ventas-springboot/
+
+front-despacho/
+
+k8s/
+├── frontend.yaml
+├── despacho.yaml
+├── ventas.yaml
+├── service.yaml
+└── hpa.yaml
+
+README.md
 ```
 
-# Configuración Base de Datos
 
-Crear una base de datos MySQL:
+# Funcionalidades implementadas
 
-```sql
-CREATE DATABASE despacho_db;
-```
+- API REST con Spring Boot.
+- Frontend React.
+- Dockerización de todos los servicios.
+- Publicación automática de imágenes.
+- Pipeline CI/CD.
+- Despliegue mediante Kubernetes.
+- Configuración de Horizontal Pod Autoscaler.
+- Uso de Secrets para credenciales.
 
-Configurar las credenciales en el archivo:
 
-```properties
-src/main/resources/application.properties
-```
+# Pipeline CI/CD
 
-Ejemplo:
+Cada actualización enviada a la rama principal ejecuta automáticamente un pipeline que realiza las siguientes tareas:
 
-```properties
-spring.datasource.url=jdbc:mysql://localhost:3306/despacho_db
-spring.datasource.username=root
-spring.datasource.password=123456
+1. Clona el repositorio.
+2. Compila Backend Despachos.
+3. Compila Backend Ventas.
+4. Compila Frontend.
+5. Construye las imágenes Docker.
+6. Publica las imágenes en Amazon ECR.
+7. Ejecuta el despliegue sobre Kubernetes.
 
-spring.jpa.hibernate.ddl-auto=update
-spring.jpa.show-sql=true
-```
-
-# Ejecución Local
-
-## Clonar repositorio
-
-```bash
-git clone https://github.com/usuario/repositorio.git
-```
-
-## Ingresar al proyecto
-
-```bash
-cd Springboot-API-REST-DESPACHO
-```
-
-## Compilar proyecto
-
-```bash
-mvn clean package
-```
-
-## Ejecutar aplicación
-
-```bash
-java -jar target/*.jar
-```
-
-La API quedará disponible en:
-
-```text
-http://localhost:8081
-```
 
 # Docker
 
-## Construcción de la imagen
+Para cada servicio se construyó una imagen Docker independiente.
 
-```bash
-docker build -t despacho:v1 .
-```
+Servicios:
 
-## Verificar imagen creada
+- Frontend
+- Backend Despachos
+- Backend Ventas
 
-```bash
-docker images
-```
 
-## Ejecutar contenedor
+# Kubernetes
 
-```bash
-docker run -p 8081:8081 despacho:v1
-```
+Se desarrollaron manifiestos para:
 
-# Variables de Entorno
+- Deployments
+- Services
+- Horizontal Pod Autoscaler
 
-Para entornos Docker y AWS se utilizan variables de entorno para la conexión a la base de datos:
+La solución quedó preparada para ejecutarse sobre Amazon EKS.
+
+
+# Amazon EKS
+
+Durante el desarrollo se realizó:
+
+- Creación del clúster.
+- Configuración de IAM.
+- Configuración de Node Groups.
+- Integración con kubectl.
+- Configuración del acceso mediante aws-auth.
+
+Debido a las restricciones propias del entorno AWS Academy Learner Lab, el registro definitivo de los nodos presentó limitaciones de permisos IAM. Sin embargo, se logró crear el clúster, configurar la infraestructura y validar el funcionamiento del pipeline CI/CD.
+
+
+# Amazon ECR
+
+Las imágenes Docker se publican automáticamente mediante GitHub Actions.
+
+Repositorios utilizados:
+
+- Frontend
+- Backend Despachos
+- Backend Ventas
+
+
+# Variables de entorno
+
+Las credenciales necesarias para el despliegue se almacenan mediante GitHub Secrets.
+
+Ejemplos:
 
 ```text
-DB_ENDPOINT
-DB_PORT
-DB_NAME
-DB_USERNAME
-DB_PASSWORD
+AWS_ACCESS_KEY_ID
+AWS_SECRET_ACCESS_KEY
+AWS_REGION
+AWS_ACCOUNT_ID
+
+ECR_FRONTEND
+ECR_DESPACHO
+ECR_VENTAS
 ```
 
-Ejemplo:
 
-```bash
-docker run -p 8081:8081 ^
--e DB_ENDPOINT=localhost ^
--e DB_PORT=3306 ^
--e DB_NAME=despacho_db ^
--e DB_USERNAME=root ^
--e DB_PASSWORD=123456 ^
-despacho:v1
-```
+# Evidencias obtenidas
 
-# Swagger
+Durante el desarrollo se validó:
 
-La documentación de la API puede visualizarse en:
-
-```text
-http://localhost:8081/swagger-ui/index.html
-```
-
-Desde Swagger es posible:
-
-- Consultar endpoints disponibles.
-- Realizar pruebas de API.
-- Revisar modelos de datos.
-- Validar respuestas del servicio.
-
-# Despliegue AWS EC2
-
-La aplicación fue desplegada en una instancia EC2 de AWS utilizando Docker.
-
-### Actividades realizadas
-
-1. Creación de instancia EC2.
-2. Instalación de Docker.
-3. Descarga de imagen desde Docker Hub.
-4. Ejecución del contenedor.
-5. Configuración de puertos.
-6. Validación mediante Swagger.
+- Construcción correcta de imágenes Docker.
+- Ejecución local mediante Docker.
+- Pipeline GitHub Actions exitoso.
+- Publicación de imágenes.
+- Creación del clúster Amazon EKS.
+- Configuración Kubernetes.
+- Integración con kubectl.
 
 
-# Control de Versiones
+# Dificultades encontradas
 
-El proyecto fue gestionado mediante Git y GitHub.
+Durante el desarrollo se presentaron algunos inconvenientes:
 
-Se realizaron:
+- Restricciones de permisos IAM del entorno AWS Academy.
+- Problemas iniciales con Node Groups.
+- Configuración del archivo aws-auth.
+- Ajustes del workflow de GitHub Actions.
+- Configuración de Maven en el runner de GitHub.
 
-- Registro de cambios mediante commits.
-- Respaldo remoto del código.
-- Seguimiento del avance del proyecto.
-- Colaboración entre integrantes del equipo.
+Todos estos inconvenientes fueron solucionados o documentados durante el proceso.
 
 
-# Conexión Frontend - Backend
+# Resultados
 
-El frontend consume los servicios expuestos por la API REST.
+Se implementó un flujo DevOps completamente automatizado que permite:
 
-Ejemplo de URL base:
+- Compilar el proyecto automáticamente.
+- Construir imágenes Docker.
+- Publicarlas en Amazon ECR.
+- Automatizar el despliegue mediante GitHub Actions.
+- Preparar la infraestructura para Kubernetes sobre Amazon EKS.
 
-```javascript
-const API_URL = "http://localhost:8081/api/despachos";
-```
 
-Ejemplo de consumo:
+# Mejoras futuras
 
-```javascript
-fetch(API_URL)
-  .then(response => response.json())
-  .then(data => console.log(data));
-```
+- Completar el despliegue final sobre EKS con una cuenta AWS sin restricciones.
+- Incorporar monitoreo mediante Prometheus y Grafana.
+- Implementar Ingress Controller.
+- Incorporar certificados HTTPS.
+- Implementar despliegues Blue/Green.
 
-# Pruebas Realizadas
 
-- Construcción de imagen Docker.
-- Ejecución de contenedor Docker.
-- Conexión a base de datos MySQL.
-- Pruebas de endpoints mediante Swagger.
-- Publicación de imagen en Docker Hub.
-- Despliegue en AWS EC2.
-- Consumo desde Frontend.
+# Conclusión
+
+El proyecto permitió aplicar los principales conceptos de DevOps mediante la automatización del ciclo de vida de una aplicación, integrando Docker, Kubernetes, Amazon Web Services y GitHub Actions en un flujo continuo de integración y despliegue.
+
+A pesar de las limitaciones del entorno AWS Academy respecto a permisos IAM para el registro de nodos, se logró desarrollar una solución funcional, automatizada y alineada con los objetivos de la evaluación.
 
 Integrantes:
 
