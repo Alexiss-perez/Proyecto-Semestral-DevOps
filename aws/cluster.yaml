@@ -1,0 +1,17 @@
+apiVersion: eksctl.io/v1alpha5
+kind: ClusterConfig
+
+metadata:
+  name: innovatech-eks-cluster
+  region: us-east-1
+
+instanceRoleARN: arn:aws:iam::806943087941:role/c217931a5501409l15667804t1w806943087-LabEksNodeRole-gOCDWWAY3asU
+
+managedNodeGroups:
+  - name: innovatech-ng
+    instanceType: t3.medium
+    desiredCapacity: 2
+    minSize: 1
+    maxSize: 3
+    iam:
+      instanceRoleARN: arn:aws:iam::806943087941:role/c217931a5501409115667804t1w806943087-LabEksNodeRole-gOCDWWAY3asU
