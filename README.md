@@ -271,8 +271,4 @@ El proyecto permitió aplicar los principales conceptos de DevOps mediante la au
 
 A pesar de las limitaciones del entorno AWS Academy respecto a permisos IAM para el registro de nodos, se logró desarrollar una solución funcional, automatizada y alineada con los objetivos de la evaluación.
 
-Integrantes:
-
-- Fernanda Collinao
-- Alexiss Pérez
 
