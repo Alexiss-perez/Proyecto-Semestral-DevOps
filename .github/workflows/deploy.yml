@@ -26,7 +26,7 @@ jobs:
       - name: Compilar backend ventas
         run: |
           cd back-ventas-springboot/api-rest-ventas
-          ./mvnw clean package -DskipTests
+          mvn clean package -DskipTests
 
       - name: Configurar Node.js
         uses: actions/setup-node@v4
