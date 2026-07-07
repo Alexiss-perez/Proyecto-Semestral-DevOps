@@ -1,0 +1,78 @@
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: innovatech-mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: innovatech
+      MYSQL_USER: innovatech
+      MYSQL_PASSWORD: innovatech123
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    networks:
+      - innovatech-network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-proot"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  despacho-service:
+    build:
+      context: ./back-bespachos-springboot/api-rest-despacho
+      dockerfile: Dockerfile
+    container_name: innovatech-despacho
+    environment:
+      DB_ENDPOINT: mysql
+      DB_PORT: 3306
+      DB_NAME: innovatech
+      DB_USERNAME: innovatech
+      DB_PASSWORD: innovatech123
+    ports:
+      - "8081:8081"
+    depends_on:
+      mysql:
+        condition: service_healthy
+    networks:
+      - innovatech-network
+
+  ventas-service:
+    build:
+      context: ./back-ventas-springboot/api-rest-ventas
+      dockerfile: Dockerfile
+    container_name: innovatech-ventas
+    environment:
+      DB_ENDPOINT: mysql
+      DB_PORT: 3306
+      DB_NAME: innovatech
+      DB_USERNAME: innovatech
+      DB_PASSWORD: innovatech123
+    ports:
+      - "8082:8080"
+    depends_on:
+      mysql:
+        condition: service_healthy
+    networks:
+      - innovatech-network
+
+  frontend:
+    build:
+      context: ./front-despacho
+      dockerfile: Dockerfile
+    container_name: innovatech-frontend
+    ports:
+      - "5173:80"
+    depends_on:
+      - despacho-service
+      - ventas-service
+    networks:
+      - innovatech-network
+
+volumes:
+  mysql_data:
+
+networks:
+  innovatech-network:
+    driver: bridge
