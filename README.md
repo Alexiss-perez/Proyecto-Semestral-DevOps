@@ -4,27 +4,30 @@
 
 Proyecto desarrollado para la asignatura **Introducción a Herramientas DevOps**.
 
-El objetivo fue implementar una arquitectura basada en contenedores utilizando Docker, automatizar la integración y el despliegue continuo mediante GitHub Actions, y orquestar los servicios con Kubernetes sobre Amazon EKS.
+El objetivo fue implementar una arquitectura basada en contenedores utilizando Docker, automatizar la integración y el despliegue continuo mediante GitHub Actions, y preparar la orquestación de los servicios mediante Kubernetes para su despliegue sobre Amazon EKS.
 
-La solución contempla backend desarrollado con Spring Boot, frontend desarrollado con React y una infraestructura preparada para ejecutarse en la nube utilizando servicios de AWS.
+La solución contempla dos microservicios backend desarrollados con Spring Boot, un frontend desarrollado con React, una base de datos MySQL y una infraestructura preparada para ejecutarse en AWS.
 
+---
 
 # Integrantes
 
 - Fernanda Collinao
 - Alexiss Pérez
 
+---
 
 # Objetivos
 
 - Contenerizar los servicios mediante Docker.
-- Automatizar el proceso de integración continua (CI).
-- Automatizar el despliegue continuo (CD).
+- Automatizar el proceso de Integración Continua (CI).
+- Preparar el Despliegue Continuo (CD).
 - Publicar imágenes Docker en Amazon ECR.
 - Orquestar los contenedores utilizando Kubernetes.
-- Desplegar la solución sobre Amazon EKS.
+- Preparar la solución para Amazon EKS.
 - Aplicar buenas prácticas DevOps.
 
+---
 
 # Arquitectura
 
@@ -57,6 +60,7 @@ La solución contempla backend desarrollado con Spring Boot, frontend desarrolla
                     MySQL
 ```
 
+---
 
 # Tecnologías Utilizadas
 
@@ -74,7 +78,7 @@ La solución contempla backend desarrollado con Spring Boot, frontend desarrolla
 
 ## Base de Datos
 
-- MySQL
+- MySQL 8
 
 ## Contenedores
 
@@ -89,8 +93,8 @@ La solución contempla backend desarrollado con Spring Boot, frontend desarrolla
 
 ## AWS
 
-- Amazon EKS
 - Amazon ECR
+- Amazon EKS
 - AWS CLI
 - IAM
 
@@ -103,17 +107,18 @@ La solución contempla backend desarrollado con Spring Boot, frontend desarrolla
 - Git
 - GitHub
 
+---
 
 # Estructura del Proyecto
 
 ```text
-Proyecto-Semestral-DevOps/
+Proyecto-Semestral-DevOps-Final/
 
 .github/
 └── workflows/
     └── deploy.yml
 
-back-despachos-springboot/
+back-bespachos-springboot/
 
 back-ventas-springboot/
 
@@ -123,28 +128,31 @@ k8s/
 ├── frontend.yaml
 ├── despacho.yaml
 ├── ventas.yaml
-├── service.yaml
-└── hpa.yaml
+└── mysql.yaml
+
+docker-compose.yml
 
 README.md
 ```
 
+---
 
-# Funcionalidades implementadas
+# Funcionalidades Implementadas
 
-- API REST con Spring Boot.
+- API REST para Despachos.
+- API REST para Ventas.
 - Frontend React.
-- Dockerización de todos los servicios.
-- Publicación automática de imágenes.
-- Pipeline CI/CD.
-- Despliegue mediante Kubernetes.
-- Configuración de Horizontal Pod Autoscaler.
-- Uso de Secrets para credenciales.
+- Contenerización mediante Docker.
+- Ejecución integrada con Docker Compose.
+- Pipeline CI/CD con GitHub Actions.
+- Manifiestos Kubernetes.
+- Uso de Secrets para configuración de base de datos.
 
+---
 
 # Pipeline CI/CD
 
-Cada actualización enviada a la rama principal ejecuta automáticamente un pipeline que realiza las siguientes tareas:
+Cada actualización enviada a la rama **main** ejecuta automáticamente un pipeline que realiza las siguientes tareas:
 
 1. Clona el repositorio.
 2. Compila Backend Despachos.
@@ -152,123 +160,134 @@ Cada actualización enviada a la rama principal ejecuta automáticamente un pipe
 4. Compila Frontend.
 5. Construye las imágenes Docker.
 6. Publica las imágenes en Amazon ECR.
-7. Ejecuta el despliegue sobre Kubernetes.
+7. Deja preparado el despliegue mediante manifiestos Kubernetes.
 
+---
 
 # Docker
 
-Para cada servicio se construyó una imagen Docker independiente.
-
-Servicios:
+Se construyeron imágenes Docker independientes para:
 
 - Frontend
 - Backend Despachos
 - Backend Ventas
+- Base de datos MySQL
 
+La ejecución local del proyecto se realiza mediante **Docker Compose**.
+
+---
 
 # Kubernetes
 
-Se desarrollaron manifiestos para:
+Se desarrollaron manifiestos Kubernetes para:
 
-- Deployments
+- Deployment Frontend
+- Deployment Backend Despachos
+- Deployment Backend Ventas
+- Deployment MySQL
 - Services
-- Horizontal Pod Autoscaler
+- Secrets
 
 La solución quedó preparada para ejecutarse sobre Amazon EKS.
 
+---
 
 # Amazon EKS
 
 Durante el desarrollo se realizó:
 
 - Creación del clúster.
-- Configuración de IAM.
+- Configuración de kubectl.
 - Configuración de Node Groups.
-- Integración con kubectl.
-- Configuración del acceso mediante aws-auth.
+- Integración con AWS CLI.
+- Preparación de los manifiestos Kubernetes.
 
-Debido a las restricciones propias del entorno AWS Academy Learner Lab, el registro definitivo de los nodos presentó limitaciones de permisos IAM. Sin embargo, se logró crear el clúster, configurar la infraestructura y validar el funcionamiento del pipeline CI/CD.
+Debido a las restricciones del entorno **AWS Academy Learner Lab**, el acceso al clúster presentó limitaciones relacionadas con permisos IAM y disponibilidad del entorno, por lo que el despliegue quedó preparado para una cuenta AWS sin dichas restricciones.
 
+---
 
 # Amazon ECR
 
-Las imágenes Docker se publican automáticamente mediante GitHub Actions.
+El proyecto contempla la publicación automática de imágenes Docker mediante GitHub Actions.
 
 Repositorios utilizados:
 
-- Frontend
-- Backend Despachos
-- Backend Ventas
+- innovatech-frontend
+- innovatech-despacho
+- innovatech-ventas
 
+---
 
-# Variables de entorno
+# Variables de Entorno
 
-Las credenciales necesarias para el despliegue se almacenan mediante GitHub Secrets.
+Las credenciales necesarias para AWS se almacenan mediante **GitHub Secrets**.
 
-Ejemplos:
+Variables utilizadas:
 
 ```text
 AWS_ACCESS_KEY_ID
 AWS_SECRET_ACCESS_KEY
+AWS_SESSION_TOKEN
 AWS_REGION
-AWS_ACCOUNT_ID
-
-ECR_FRONTEND
-ECR_DESPACHO
-ECR_VENTAS
 ```
 
+---
 
-# Evidencias obtenidas
+# Evidencias Obtenidas
 
 Durante el desarrollo se validó:
 
 - Construcción correcta de imágenes Docker.
-- Ejecución local mediante Docker.
-- Pipeline GitHub Actions exitoso.
-- Publicación de imágenes.
-- Creación del clúster Amazon EKS.
+- Ejecución local mediante Docker Compose.
+- Funcionamiento del frontend.
+- Funcionamiento de los microservicios.
+- Conexión exitosa con MySQL.
+- Documentación Swagger.
 - Configuración Kubernetes.
-- Integración con kubectl.
+- Pipeline CI/CD.
+- Configuración de GitHub Actions.
 
+---
 
-# Dificultades encontradas
+# Dificultades Encontradas
 
 Durante el desarrollo se presentaron algunos inconvenientes:
 
-- Restricciones de permisos IAM del entorno AWS Academy.
-- Problemas iniciales con Node Groups.
-- Configuración del archivo aws-auth.
-- Ajustes del workflow de GitHub Actions.
-- Configuración de Maven en el runner de GitHub.
+- Restricciones del entorno AWS Academy.
+- Configuración inicial de Docker Compose.
+- Integración de MySQL con los microservicios.
+- Ajustes del workflow GitHub Actions.
+- Configuración de Kubernetes.
 
-Todos estos inconvenientes fueron solucionados o documentados durante el proceso.
+Todos estos inconvenientes fueron solucionados o documentados durante el desarrollo del proyecto.
 
+---
 
 # Resultados
 
-Se implementó un flujo DevOps completamente automatizado que permite:
+Se implementó una solución basada en prácticas DevOps que permite:
 
-- Compilar el proyecto automáticamente.
+- Automatizar la compilación del proyecto.
+- Ejecutar la solución mediante Docker Compose.
 - Construir imágenes Docker.
-- Publicarlas en Amazon ECR.
-- Automatizar el despliegue mediante GitHub Actions.
-- Preparar la infraestructura para Kubernetes sobre Amazon EKS.
+- Preparar el despliegue mediante Kubernetes.
+- Integrar el proyecto con GitHub Actions.
+- Preparar la publicación de imágenes hacia Amazon ECR.
 
+---
 
-# Mejoras futuras
+# Mejoras Futuras
 
-- Completar el despliegue final sobre EKS con una cuenta AWS sin restricciones.
-- Incorporar monitoreo mediante Prometheus y Grafana.
+- Completar el despliegue automático sobre Amazon EKS.
+- Incorporar Prometheus y Grafana para monitoreo.
 - Implementar Ingress Controller.
 - Incorporar certificados HTTPS.
-- Implementar despliegues Blue/Green.
+- Implementar estrategias Blue/Green Deployment.
 
+---
 
 # Conclusión
 
-El proyecto permitió aplicar los principales conceptos de DevOps mediante la automatización del ciclo de vida de una aplicación, integrando Docker, Kubernetes, Amazon Web Services y GitHub Actions en un flujo continuo de integración y despliegue.
+El proyecto permitió aplicar los principales conceptos de DevOps mediante la integración de Docker, Docker Compose, Kubernetes, GitHub Actions y Amazon Web Services.
 
-A pesar de las limitaciones del entorno AWS Academy respecto a permisos IAM para el registro de nodos, se logró desarrollar una solución funcional, automatizada y alineada con los objetivos de la evaluación.
-
-
+Se logró implementar una arquitectura basada en microservicios completamente funcional en entorno local, automatizando el proceso de construcción de la solución y preparando la infraestructura para su despliegue sobre Amazon EKS.
